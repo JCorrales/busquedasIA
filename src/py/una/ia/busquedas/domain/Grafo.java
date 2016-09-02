@@ -1,7 +1,9 @@
 
 package py.una.ia.busquedas.domain;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,8 +19,11 @@ public class Grafo {
     private final int origen;
     private final int destino;
     private final double[] h;
-    private final List<Nodo> nodos = new ArrayList<>();
+    private List<Integer> visitados = new ArrayList<>();
+    private List<Integer> arbol = new ArrayList<>();
     public static final int NO_HAY_RUTA = 0;
+    private int heuristicas = 0;
+    private int alAzar = 0;
     
     /**
      * 
@@ -26,6 +31,8 @@ public class Grafo {
      * @param e porcentaje de aristas a eliminar
      * @param min distancia minima entre dos ciudades
      * @param max distancia maxima entre dos ciudades
+     * @param origen
+     * @param destino
      */
     public Grafo(int n, int e, int min, int max, int origen, int destino){
         this.ciudades = new int[n][n];
@@ -39,7 +46,7 @@ public class Grafo {
         generarMatrizVacia();
         generarGrafoConexo(min, max);
         h[destino] = 0;
-        crearHeuristica(min, destino, destino);
+        crearHeuristica(min, destino);
         engordarGrafo(min, max, e);
     }
 
@@ -108,13 +115,24 @@ public class Grafo {
         return conectados.get(Util.randInt(0, conectados.size()-1));
     }
     
-    private void crearHeuristica(int min, int actual, int padre) {
-        for(int hijo=0; hijo< n; hijo++){
-            if(ciudades[actual][hijo] != NO_HAY_RUTA && hijo != padre){
-                h[hijo] = h[padre] + ((float)Util.randInt(80, 100)/100*min);
-                crearHeuristica(min, hijo, actual);
+    private void crearHeuristica(int min, int destino) {
+        visitados.add(destino);
+        arbol.add(destino);
+        int padre;
+        while(arbol.size() > 0){
+            padre = arbol.remove(0);
+            for(int hijo=0; hijo< n; hijo++){
+                if(ciudades[padre][hijo] != NO_HAY_RUTA){
+                    if(!visitados.contains(hijo)){
+                        visitados.add(hijo);
+                        arbol.add(hijo);
+                        h[hijo] = h[padre] + ((float)Util.randInt(80, 100)/100*min);
+                        heuristicas++;
+                    }
+                }
             }
         }
+        System.out.println("Heuristicas: "+heuristicas);
     }
     
     /**
@@ -128,7 +146,21 @@ public class Grafo {
         int cuantas = totalAristas - actualAristas - (int)(((float)totalAristas)/100*e);
         int index;
         List<List<Integer>> aristaVacias = new ArrayList<>();
+        //crear la mayor cantidad posible de aristas totalmente al azar
+        System.out.println("Creando aristas (fila y columna al azar) ...");
+        for(int i=0; i < cuantas*100; i++){
+            fila = Util.randInt(0, n-1);
+            columna = Util.randInt(0, n-1);
+            if(ciudades[fila][columna] != NO_HAY_RUTA){
+                ciudades[fila][columna] = Util.randInt(min, max);
+                ciudades[columna][fila] = ciudades[fila][columna];
+                alAzar++;
+            }
+        }
+        System.out.println("Creadas: "+alAzar);
         //crear una lista de todas las aristas vacias, solo triangular superior
+        
+        System.out.println("Creando lista de aristas vacias...");
         for(int i=0; i < n; i++){
             for(int j=i+1; j < n; j++){
                 List<Integer> arista = new ArrayList<>();
@@ -140,6 +172,7 @@ public class Grafo {
                 
             }
         }
+        System.out.println("Creando aristas ("+cuantas+") ...");
         //crear aristas
         for(int i=0; i < cuantas; i++){
             index = Util.randInt(0, aristaVacias.size()-1);
@@ -183,37 +216,4 @@ public class Grafo {
         return this.h;
     }
     
-    public List<Nodo> getNodos(){
-        return this.nodos;
-    }
-    
-    private void setNodos(){
-        for(int i=0; i < n; i++){
-            for(int j=0; j < n; j++){
-                Nodo nodo = new Nodo(i, h[i], nodos);
-            }
-        }
-    }
-    
-    public static void main(String[] args) {
-        Grafo g = new Grafo(5, 100, 2, 9, 2, 4);
-        int count = 0;
-        System.out.println("hola!!");
-        for(int fila=0; fila < g.getN(); fila++){
-            for(int columna = 0; columna < g.getN(); columna++){
-                System.out.print(g.getCiudades()[fila][columna]+" ");
-                if(g.getCiudades()[fila][columna] != Grafo.NO_HAY_RUTA){
-                    count = count + 1;
-                }
-            }
-            System.out.println();
-        }
-        System.out.println("Aristas: "+count/2);
-        for(int i=0; i<g.getH().length-1; i++){
-            System.out.println(g.getH()[i]);
-        }
-        
-        System.out.println(((float)Util.randInt(80, 100)/100*g.getMin()));
-    }
-
 }
