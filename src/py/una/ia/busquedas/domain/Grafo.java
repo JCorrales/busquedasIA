@@ -1,9 +1,7 @@
 
 package py.una.ia.busquedas.domain;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

@@ -5,6 +5,7 @@
  */
 package py.una.ia.busquedas.main;
 
+import py.una.ia.busquedas.algoritmos.Aestrella;
 import py.una.ia.busquedas.algoritmos.Avaro;
 import py.una.ia.busquedas.algoritmos.CostoUniforme;
 import py.una.ia.busquedas.domain.Grafo;
@@ -18,7 +19,7 @@ public class Test {
     
     public static void main(String[] args) {
         Long start = System.currentTimeMillis();
-        Grafo g = new Grafo(500, 50, 5, 12, 0, 9);
+        Grafo g = new Grafo(1000, 50, 5, 12, 0, 9);
         int count = 0;
         for(int fila=0; fila < g.getN(); fila++){
             for(int columna = 0; columna < g.getN(); columna++){
@@ -72,6 +73,21 @@ public class Test {
             System.out.println(camino2.getNombre());
             camino2 = camino2.getPadre();
         }while(camino2 != null);
+        
+        System.out.println("************** Probando A* ****************");
+        Nodo.resetExpandidos();
+        Aestrella estrella = new Aestrella(g, 10000L);
+        estrella.buscar();
+        System.out.println("Expandidos: "+Nodo.getExpandidos());
+        System.out.println("Tiempo: "+estrella.getTiempo());
+        System.out.println("Profundidad: "+estrella.getProfundidadMaxima());
+        System.out.println("Costo: "+estrella.getSolucion().getCosto());
+        Nodo camino3 = estrella.getSolucion();
+        System.out.println("--camino--");
+        do{
+            System.out.println(camino3.getNombre());
+            camino3 = camino3.getPadre();
+        }while(camino3 != null);
         
     }
     
