@@ -62,13 +62,19 @@ public class Aestrella {
         checkTime();
         List<Nodo> hijos = padre.expandir();
         Collections.sort(hijos);
+        System.out.println("+++++++++++++++++++");
+        for (int i=0; i< hijos.size(); i++) {
+            System.out.print(hijos.get(i).getF()+" ");
+        }
+        System.out.println("opa");
         
         for(int i=0; i< hijos.size(); i++){
             if(stop){
                 return;
             }
-            if(hijos.get(i).getNombre() == destino && hijos.get(i).getCosto() < solucion.getCosto()){
+            if(hijos.get(i).getNombre() == destino){
                 solucion = hijos.get(i);
+                this.stop = true;
             }else{
                 profundidad += 1L;
                 busquedaAestrella(hijos.get(i));
@@ -77,8 +83,7 @@ public class Aestrella {
                 }
                 profundidad = 0L;
             }  
-        }
-        
+        }        
     }
 
     public Long getProfundidadMaxima() {

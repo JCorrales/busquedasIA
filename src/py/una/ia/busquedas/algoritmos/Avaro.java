@@ -29,9 +29,6 @@ public class Avaro {
         this.origen = grafo.getOrigen();
         this.destino = grafo.getDestino();
         this.h = grafo.getH();
-        Nodo lejos = new NodoHeuristico(origen, null, grafo);
-        lejos.setCosto(Integer.MAX_VALUE);
-        this.solucion = lejos;
         this.maxTime = maxTime;
     }
     
@@ -59,26 +56,26 @@ public class Avaro {
      * Busca en profunidad, evita generar estados repetidos
      */
     private void busquedaAvara(Nodo padre){
+        if(padre.getNombre() == this.destino){
+            solucion = padre;
+            this.stop = true;
+            return;
+        }
         checkTime();
         List<Nodo> hijos = padre.expandir();
         Collections.sort(hijos);
-        
+      
         for(int i=0; i< hijos.size(); i++){
             if(stop){
                 return;
             }
-            if(hijos.get(i).getNombre() == destino && hijos.get(i).getCosto() < solucion.getCosto()){
-                solucion = hijos.get(i);
-            }else{
-                profundidad += 1L;
-                busquedaAvara(hijos.get(i));
-                if(profundidad > profundidadMaxima){
-                    profundidadMaxima = profundidad;
-                }
-                profundidad = 0L;
-            }  
+            profundidad += 1L;
+            busquedaAvara(hijos.get(i));
+            if(profundidad > profundidadMaxima){
+                profundidadMaxima = profundidad;
+            }
+            profundidad = 0L;
         }
-        
     }
 
     public Long getProfundidadMaxima() {

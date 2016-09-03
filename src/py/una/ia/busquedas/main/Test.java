@@ -19,21 +19,21 @@ public class Test {
     
     public static void main(String[] args) {
         Long start = System.currentTimeMillis();
-        Grafo g = new Grafo(1000, 50, 5, 12, 0, 9);
+        Grafo g = new Grafo(10, 50, 1, 9, 0, 4);
         int count = 0;
         for(int fila=0; fila < g.getN(); fila++){
             for(int columna = 0; columna < g.getN(); columna++){
-                //System.out.print(g.getCiudades()[fila][columna]+" ");
+                System.out.print(g.getCiudades()[fila][columna]+" ");
                 if(g.getCiudades()[fila][columna] != Grafo.NO_HAY_RUTA){
                     count = count + 1;
                 }
             }
-            //System.out.println();
+            System.out.println();
         }
         System.out.println("Aristas: "+count/2);
         double mayorH = Integer.MIN_VALUE;
         double menorH = Integer.MAX_VALUE;
-        for(int i=0; i<g.getH().length-1; i++){
+        for(int i=0; i<g.getH().length; i++){
             if(g.getH()[i]> mayorH){
                 mayorH = g.getH()[i];
             }

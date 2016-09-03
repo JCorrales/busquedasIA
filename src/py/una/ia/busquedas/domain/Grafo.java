@@ -18,7 +18,6 @@ public class Grafo {
     private final int destino;
     private final double[] h;
     private List<Integer> visitados = new ArrayList<>();
-    private List<Integer> arbol = new ArrayList<>();
     public static final int NO_HAY_RUTA = 0;
     private int heuristicas = 0;
     private int alAzar = 0;
@@ -46,6 +45,8 @@ public class Grafo {
         h[destino] = 0;
         crearHeuristica(min, destino);
         engordarGrafo(min, max, e);
+        System.out.println("visitados: "+visitados.size());
+        System.out.println("heuristicas: "+heuristicas);
     }
 
     private void generarMatrizVacia() {
@@ -113,24 +114,18 @@ public class Grafo {
         return conectados.get(Util.randInt(0, conectados.size()-1));
     }
     
-    private void crearHeuristica(int min, int destino) {
-        visitados.add(destino);
-        arbol.add(destino);
-        int padre;
-        while(arbol.size() > 0){
-            padre = arbol.remove(0);
-            for(int hijo=0; hijo< n; hijo++){
-                if(ciudades[padre][hijo] != NO_HAY_RUTA){
-                    if(!visitados.contains(hijo)){
-                        visitados.add(hijo);
-                        arbol.add(hijo);
-                        h[hijo] = h[padre] + ((float)Util.randInt(80, 100)/100*min);
-                        heuristicas++;
-                    }
+    private void crearHeuristica(int min, int padre){
+        visitados.add(padre);
+        for(int hijo=0; hijo < n; hijo++){
+            if(ciudades[padre][hijo] != NO_HAY_RUTA){
+                if(!visitados.contains(hijo)){
+                    h[hijo] = h[padre] + ((float)Util.randInt(80, 100)/100*min);
+                    System.out.println("padre:"+padre+": "+h[padre]+"hijo: "+hijo+": "+h[hijo]);
+                    heuristicas++;
+                    crearHeuristica(min, hijo);
                 }
             }
         }
-        System.out.println("Heuristicas: "+heuristicas);
     }
     
     /**
@@ -143,7 +138,7 @@ public class Grafo {
         int actualAristas = n-1;//el grafo conexo debe tener minimo n-1 aristas
         int cuantas = totalAristas - actualAristas - (int)(((float)totalAristas)/100*e);
         int index;
-        List<List<Integer>> aristaVacias = new ArrayList<>();
+        List<Arista> aristaVacias = new ArrayList<>();
         //crear la mayor cantidad posible de aristas totalmente al azar
         System.out.println("Creando aristas (fila y columna al azar) ...");
         for(int i=0; i < cuantas*100; i++){
@@ -161,26 +156,71 @@ public class Grafo {
         System.out.println("Creando lista de aristas vacias...");
         for(int i=0; i < n; i++){
             for(int j=i+1; j < n; j++){
-                List<Integer> arista = new ArrayList<>();
+                Arista arista = new Arista();
                 if(ciudades[i][j] == NO_HAY_RUTA){
-                    arista.add(i);
-                    arista.add(j);
+                    arista.setFila(i);
+                    arista.setColumnna(j);
                     aristaVacias.add(arista);
                 }
-                
             }
         }
         System.out.println("Creando aristas ("+cuantas+") ...");
         //crear aristas
+        if(cuantas <= 250000){
+            sobreVacias(aristaVacias, cuantas);
+        }else{
+            sobreSubListas(aristaVacias, cuantas);
+        }
+        System.out.println("Hecho");
+    }
+    
+    private void sobreVacias(List<Arista> aristaVacias, int cuantas) {
+        int fila;
+        int columna;
+        int index;
         for(int i=0; i < cuantas; i++){
+            
             index = Util.randInt(0, aristaVacias.size()-1);
-            fila = aristaVacias.get(index).get(0);
-            columna = aristaVacias.get(index).get(1);
+            fila = aristaVacias.get(index).getFila();
+            columna = aristaVacias.get(index).getColumnna();
             ciudades[fila][columna] = Util.randInt(min, max);
             ciudades[columna][fila] = ciudades[fila][columna];
             aristaVacias.remove(index);
         }
     }
+    
+    private void sobreSubListas(List<Arista> aristaVacias, int cuantas) {
+        int fila;
+        int columna;
+        int index;
+        int subSize = 1000;
+        int creadas = 0;
+        int[] sizes;
+        Arista arista = null;
+        List<List<Arista>> hiperMatriz = new ArrayList<>();
+        for(int i=0; i < aristaVacias.size();i += subSize){
+            hiperMatriz.add(aristaVacias.subList(i, i+subSize >= aristaVacias.size() ? aristaVacias.size() : i+subSize));
+        }
+        sizes = new int[hiperMatriz.size()];
+        for (int i = 0; i < sizes.length; i++) {
+            sizes[i] = subSize;
+        }
+        for(int i=0; i < cuantas; i++){
+            index = Util.randInt(0, hiperMatriz.size()-1);
+            List<Arista> sub = hiperMatriz.get(index);
+            try{
+                arista = sub.get(Util.randInt(0, sizes[i]-1));
+                sizes[i]--;
+                fila = arista.getFila();
+                columna = arista.getColumnna();
+                ciudades[fila][columna] = Util.randInt(min, max);
+                ciudades[columna][fila] = ciudades[fila][columna];
+            }catch(Exception ex){
+                
+            }
+        }
+    }
+
     
     public int getN() {
         return n;
@@ -213,5 +253,6 @@ public class Grafo {
     public double[] getH(){
         return this.h;
     }
+
     
 }
