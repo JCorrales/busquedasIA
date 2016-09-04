@@ -45,8 +45,8 @@ public class Grafo {
         generarGrafoConexo(min, max);
         h[destino] = 0;
         hojas.add(destino);
-        crearHeuristica(min);
         engordarGrafo(min, max, e);
+        crearHeuristica(min);
         System.out.println("visitados: "+visitados.size());
         System.out.println("heuristicas: "+heuristicas);
     }
