@@ -19,7 +19,7 @@ public class Test {
     
     public static void main(String[] args) {
         Long start = System.currentTimeMillis();
-        Grafo g = new Grafo(10, 50, 1, 9, 0, 4);
+        Grafo g = new Grafo(10, 50, 1, 3, 0, 4);
         int count = 0;
         for(int fila=0; fila < g.getN(); fila++){
             for(int columna = 0; columna < g.getN(); columna++){
@@ -54,7 +54,7 @@ public class Test {
         Nodo camino = costo.getSolucion();
         System.out.println("--camino--");
         do{
-            System.out.println(camino.getNombre());
+            System.out.println(camino.getNombre()+" h: "+camino.getH()+ " costo: "+camino.getCosto()+" f: "+camino.getF());
             camino = camino.getPadre();
         }while(camino != null);
         
@@ -70,7 +70,7 @@ public class Test {
         Nodo camino2 = avaro.getSolucion();
         System.out.println("--camino--");
         do{
-            System.out.println(camino2.getNombre());
+            System.out.println(camino2.getNombre()+" h: "+camino2.getH()+ " costo: "+camino2.getCosto()+" f: "+camino2.getF());
             camino2 = camino2.getPadre();
         }while(camino2 != null);
         
@@ -85,7 +85,7 @@ public class Test {
         Nodo camino3 = estrella.getSolucion();
         System.out.println("--camino--");
         do{
-            System.out.println(camino3.getNombre());
+            System.out.println(camino3.getNombre()+" h: "+camino3.getH()+ " costo: "+camino3.getCosto()+" f: "+camino3.getF());
             camino3 = camino3.getPadre();
         }while(camino3 != null);
         

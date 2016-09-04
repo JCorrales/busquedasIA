@@ -18,6 +18,7 @@ public class Grafo {
     private final int destino;
     private final double[] h;
     private List<Integer> visitados = new ArrayList<>();
+    private List<Integer> hojas = new ArrayList<>();
     public static final int NO_HAY_RUTA = 0;
     private int heuristicas = 0;
     private int alAzar = 0;
@@ -43,7 +44,8 @@ public class Grafo {
         generarMatrizVacia();
         generarGrafoConexo(min, max);
         h[destino] = 0;
-        crearHeuristica(min, destino);
+        hojas.add(destino);
+        crearHeuristica(min);
         engordarGrafo(min, max, e);
         System.out.println("visitados: "+visitados.size());
         System.out.println("heuristicas: "+heuristicas);
@@ -114,15 +116,20 @@ public class Grafo {
         return conectados.get(Util.randInt(0, conectados.size()-1));
     }
     
-    private void crearHeuristica(int min, int padre){
-        visitados.add(padre);
-        for(int hijo=0; hijo < n; hijo++){
-            if(ciudades[padre][hijo] != NO_HAY_RUTA){
-                if(!visitados.contains(hijo)){
-                    h[hijo] = h[padre] + ((float)Util.randInt(80, 100)/100*min);
-                    System.out.println("padre:"+padre+": "+h[padre]+"hijo: "+hijo+": "+h[hijo]);
-                    heuristicas++;
-                    crearHeuristica(min, hijo);
+    private void crearHeuristica(int min){
+        while(hojas.size() > 0){
+            Integer padre = hojas.remove(0);
+            visitados.add(padre);
+            for(int hijo=0; hijo < n; hijo++){
+                if(ciudades[padre][hijo] != NO_HAY_RUTA){
+                    if(!visitados.contains(hijo)){
+                        //agrego el hijo al final de la lista
+                        hojas.add(hijo);
+                        visitados.add(hijo);
+                        h[hijo] = h[padre] + ((float)Util.randInt(80, 100)/100*min);
+                        System.out.println("padre:"+padre+": "+h[padre]+"hijo: "+hijo+": "+h[hijo]);
+                        heuristicas++;
+                    }
                 }
             }
         }

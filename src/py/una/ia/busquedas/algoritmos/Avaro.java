@@ -3,6 +3,7 @@ package py.una.ia.busquedas.algoritmos;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 import py.una.ia.busquedas.domain.Grafo;
 import py.una.ia.busquedas.domain.Nodo;
 import py.una.ia.busquedas.domain.NodoHeuristico;
@@ -23,6 +24,7 @@ public class Avaro {
     private boolean stop;
     private Long start;
     private Long maxTime;
+    private final PriorityQueue<Nodo> arbol = new PriorityQueue<>();
     
     public Avaro(Grafo grafo, Long maxTime){
         this.grafo = grafo;
@@ -47,7 +49,8 @@ public class Avaro {
     public void buscar(){
         start = System.currentTimeMillis();
         Nodo nodoOrigen = new NodoHeuristico(this.grafo.getOrigen(), null, this.grafo);
-        busquedaAvara(nodoOrigen);
+        arbol.add(nodoOrigen);
+        busquedaAvara();
         Long end = System.currentTimeMillis();
         this.tiempo = end -start;
     }
@@ -55,26 +58,19 @@ public class Avaro {
     /**
      * Busca en profunidad, evita generar estados repetidos
      */
-    private void busquedaAvara(Nodo padre){
-        if(padre.getNombre() == this.destino){
-            solucion = padre;
-            this.stop = true;
-            return;
-        }
-        checkTime();
-        List<Nodo> hijos = padre.expandir();
-        Collections.sort(hijos);
-      
-        for(int i=0; i< hijos.size(); i++){
-            if(stop){
+    private void busquedaAvara(){
+        Nodo padre;
+        while(true){
+            padre = arbol.poll();
+            if(padre.getNombre() == destino){
+                solucion = padre;
                 return;
             }
-            profundidad += 1L;
-            busquedaAvara(hijos.get(i));
-            if(profundidad > profundidadMaxima){
-                profundidadMaxima = profundidad;
+            
+            List<Nodo> hijos = padre.expandir();
+            for(int i=0; i< hijos.size(); i++){
+                arbol.add(hijos.get(i));
             }
-            profundidad = 0L;
         }
     }
 

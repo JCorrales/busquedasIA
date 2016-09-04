@@ -10,10 +10,10 @@ import java.util.List;
 public abstract class Nodo implements Comparable<Nodo> {
 
     private final int nombre;
-    private Nodo padre;
+    private final Nodo padre;
     private List<Nodo> hijos;
     private final Double h;
-    private Integer costo = 0;
+    private final Integer costo;
     private final Grafo grafo;
     private static int expandidos = 0;
 
@@ -24,6 +24,9 @@ public abstract class Nodo implements Comparable<Nodo> {
         if (padre != null) {
             this.costo = padre.getCosto() + grafo.getCiudades()[padre.getNombre()][this.nombre];
             this.padre = padre;
+        }else{
+            this.costo = 0;
+            this.padre = null;
         }
     }
 
@@ -41,10 +44,6 @@ public abstract class Nodo implements Comparable<Nodo> {
 
     public Integer getCosto() {
         return costo;
-    }
-    
-    public void setCosto(Integer costo){
-        this.costo = costo;
     }
 
     public static int getExpandidos() {

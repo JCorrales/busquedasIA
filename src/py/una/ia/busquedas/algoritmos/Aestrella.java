@@ -3,6 +3,7 @@ package py.una.ia.busquedas.algoritmos;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
 import py.una.ia.busquedas.domain.Grafo;
 import py.una.ia.busquedas.domain.Nodo;
 import py.una.ia.busquedas.domain.NodoF;
@@ -23,15 +24,14 @@ public class Aestrella {
     private boolean stop;
     private Long start;
     private Long maxTime;
+    private final PriorityQueue<Nodo> arbol = new PriorityQueue<>();
+
     
     public Aestrella(Grafo grafo, Long maxTime){
         this.grafo = grafo;
         this.origen = grafo.getOrigen();
         this.destino = grafo.getDestino();
         this.h = grafo.getH();
-        Nodo lejos = new NodoF(origen, null, grafo);
-        lejos.setCosto(Integer.MAX_VALUE);
-        this.solucion = lejos;
         this.maxTime = maxTime;
     }
     
@@ -50,7 +50,8 @@ public class Aestrella {
     public void buscar(){
         start = System.currentTimeMillis();
         Nodo nodoOrigen = new NodoF(this.grafo.getOrigen(), null, this.grafo);
-        busquedaAestrella(nodoOrigen);
+        arbol.add(nodoOrigen);
+        busquedaAestrella();
         Long end = System.currentTimeMillis();
         this.tiempo = end -start;
     }
@@ -58,32 +59,20 @@ public class Aestrella {
     /**
      * Busca en profunidad, evita generar estados repetidos
      */
-    private void busquedaAestrella(Nodo padre){
-        checkTime();
-        List<Nodo> hijos = padre.expandir();
-        Collections.sort(hijos);
-        System.out.println("+++++++++++++++++++");
-        for (int i=0; i< hijos.size(); i++) {
-            System.out.print(hijos.get(i).getF()+" ");
-        }
-        System.out.println("opa");
-        
-        for(int i=0; i< hijos.size(); i++){
-            if(stop){
+    private void busquedaAestrella(){
+        Nodo padre;
+        while(true){
+            padre = arbol.poll();
+            if(padre.getNombre() == destino){
+                solucion = padre;
                 return;
             }
-            if(hijos.get(i).getNombre() == destino){
-                solucion = hijos.get(i);
-                this.stop = true;
-            }else{
-                profundidad += 1L;
-                busquedaAestrella(hijos.get(i));
-                if(profundidad > profundidadMaxima){
-                    profundidadMaxima = profundidad;
-                }
-                profundidad = 0L;
-            }  
-        }        
+            
+            List<Nodo> hijos = padre.expandir();
+            for(int i=0; i< hijos.size(); i++){
+                arbol.add(hijos.get(i));
+            }
+        }
     }
 
     public Long getProfundidadMaxima() {
