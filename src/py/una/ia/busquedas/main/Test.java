@@ -46,7 +46,7 @@ public class Test {
         Long end = System.currentTimeMillis();
         System.out.println("Tiempo en generar grafo: "+(end-start));
         System.out.println("************** Probando costo uniforme ****************");
-        CostoUniforme costo = new CostoUniforme(g);
+        CostoUniforme costo = new CostoUniforme(g, 10000L);
         costo.buscar();
         System.out.println("Expandidos: "+Nodo.getExpandidos());
         System.out.println("Tiempo: "+costo.getTiempo());

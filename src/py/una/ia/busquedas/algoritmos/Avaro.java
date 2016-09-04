@@ -21,7 +21,6 @@ public class Avaro {
     private Long tiempo;
     private Long profundidad = 0L;
     private Long profundidadMaxima = 0L;
-    private boolean stop;
     private Long start;
     private Long maxTime;
     private final PriorityQueue<Nodo> arbol = new PriorityQueue<>();
@@ -67,6 +66,10 @@ public class Avaro {
                 return;
             }
             
+            if(!hayTiempo()){
+                return;
+            }
+            
             List<Nodo> hijos = padre.expandir();
             for(int i=0; i< hijos.size(); i++){
                 arbol.add(hijos.get(i));
@@ -78,10 +81,8 @@ public class Avaro {
         return profundidadMaxima;
     }
     
-    private void checkTime(){
-        if(System.currentTimeMillis() - this.start > this.maxTime){
-            this.stop = true;
-        }
+    private boolean hayTiempo(){
+        return (System.currentTimeMillis() - this.start < this.maxTime);
     }
     
 }

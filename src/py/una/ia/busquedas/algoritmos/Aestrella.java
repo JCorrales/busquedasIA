@@ -68,6 +68,10 @@ public class Aestrella {
                 return;
             }
             
+            if(!hayTiempo()){
+                return;
+            }
+            
             List<Nodo> hijos = padre.expandir();
             for(int i=0; i< hijos.size(); i++){
                 arbol.add(hijos.get(i));
@@ -79,10 +83,8 @@ public class Aestrella {
         return profundidadMaxima;
     }
     
-    private void checkTime(){
-        if(System.currentTimeMillis() - this.start > this.maxTime){
-            this.stop = true;
-        }
+    private boolean hayTiempo(){
+        return (System.currentTimeMillis() - this.start < this.maxTime);
     }
     
 }

@@ -18,13 +18,17 @@ public class CostoUniforme {
     private final int destino;
     private Nodo solucion;
     private Long tiempo;
+    private Long maxTime;
+    private Long start;
     
-    public CostoUniforme(Grafo grafo){
+    public CostoUniforme(Grafo grafo, Long maxTime){
         this.grafo = grafo;
         this.origen = grafo.getOrigen();
         this.destino = grafo.getDestino();
         NodoCosto nodoOrigen = new NodoCosto(grafo.getOrigen(), null, grafo);
         this.arbol.add(nodoOrigen);
+        this.maxTime = maxTime;
+        
     }
     
     public Nodo getSolucion(){
@@ -32,7 +36,7 @@ public class CostoUniforme {
     }
     
     public void buscar(){
-        Long start = System.currentTimeMillis();
+        this.start = System.currentTimeMillis();
         Long end;
         Nodo padre;
         while(true){
@@ -41,6 +45,10 @@ public class CostoUniforme {
                 solucion = padre;
                 end = System.currentTimeMillis();
                 this.tiempo = end - start;
+                return;
+            }
+            
+            if(!hayTiempo()){
                 return;
             }
             
@@ -57,6 +65,10 @@ public class CostoUniforme {
 
     public void setTiempo(Long tiempo) {
         this.tiempo = tiempo;
+    }
+    
+    private boolean hayTiempo(){
+        return (System.currentTimeMillis() - this.start < this.maxTime);
     }
     
 }

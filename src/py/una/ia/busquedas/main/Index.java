@@ -257,11 +257,16 @@ public class Index extends javax.swing.JFrame {
         jTextArea1.append("Tiempo en generar grafo: "+(end-start)+"\n");
         
         jTextArea1.append("************** Probando costo uniforme ****************"+"\n");
-        CostoUniforme costo = new CostoUniforme(g);
+        CostoUniforme costo = new CostoUniforme(g, tiempo);
         costo.buscar();
         jTextArea1.append("Expandidos: "+Nodo.getExpandidos()+"\n");
         jTextArea1.append("Tiempo: "+costo.getTiempo()+"\n");
-        jTextArea1.append("Costo: "+costo.getSolucion().getCosto()+"\n");
+        if(costo.getSolucion() != null){
+            jTextArea1.append("Costo: "+costo.getSolucion().getCosto()+"\n");
+        }else{
+            jTextArea1.append("Costo: No se encontro solucion \n");
+        }
+        
         Tabla t1 = new Tabla();
         t1.setCriterio("Expandidos");
         t1.setCostoUniforme(Nodo.getExpandidos()+"");
@@ -273,8 +278,12 @@ public class Index extends javax.swing.JFrame {
         avaro.buscar();
         jTextArea1.append("Expandidos: "+Nodo.getExpandidos()+"\n");
         jTextArea1.append("Tiempo: "+avaro.getTiempo()+"\n");
-        jTextArea1.append("Profundidad: "+avaro.getProfundidadMaxima()+"\n");
-        jTextArea1.append("Costo: "+avaro.getSolucion().getCosto()+"\n");
+        if(avaro.getSolucion() != null){
+            jTextArea1.append("Costo: "+avaro.getSolucion().getCosto()+"\n");
+        }else{
+            jTextArea1.append("Costo: No se encontro solucion \n");
+        }
+        
         t1.setAvaro(Nodo.getExpandidos()+"");
         
         jTextArea1.append("************** Probando A* ****************"+"\n");
@@ -283,8 +292,12 @@ public class Index extends javax.swing.JFrame {
         estrella.buscar();
         jTextArea1.append("Expandidos: "+Nodo.getExpandidos()+"\n");
         jTextArea1.append("Tiempo: "+estrella.getTiempo()+"\n");
-        jTextArea1.append("Profundidad: "+estrella.getProfundidadMaxima()+"\n");
-        jTextArea1.append("Costo: "+estrella.getSolucion().getCosto()+"\n");
+        if(estrella.getSolucion() != null){
+            jTextArea1.append("Costo: "+estrella.getSolucion().getCosto()+"\n");
+        }else{
+            jTextArea1.append("Costo: No se encontro solucion \n");
+        }
+        
         t1.setaEstrella(Nodo.getExpandidos()+"");
         Tabla t2 = new Tabla();
         t2.setCriterio("Tiempo");
@@ -293,9 +306,9 @@ public class Index extends javax.swing.JFrame {
         t2.setaEstrella(estrella.getTiempo()+"");
         Tabla t3 = new Tabla();
         t3.setCriterio("Costo");
-        t3.setAvaro(avaro.getSolucion().getCosto()+"");
-        t3.setCostoUniforme(costo.getSolucion().getCosto()+"");
-        t3.setaEstrella(estrella.getSolucion().getCosto()+"");
+        t3.setAvaro(avaro.getSolucion() == null ? "Sin solucion" : avaro.getSolucion().getCosto() +"");
+        t3.setCostoUniforme(costo.getSolucion() == null ? "Sin solucion" : costo.getSolucion().getCosto() +"");
+        t3.setaEstrella(estrella.getSolucion() == null ? "Sin solucion" : estrella.getSolucion().getCosto() +"");
         
         List<Tabla> tabla = new ArrayList<>();
         tabla.add(t1);
