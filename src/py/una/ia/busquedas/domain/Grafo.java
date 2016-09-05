@@ -2,6 +2,7 @@
 package py.una.ia.busquedas.domain;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -146,18 +147,6 @@ public class Grafo {
         int cuantas = totalAristas - actualAristas - (int)(((float)totalAristas)/100*e);
         int index;
         List<Arista> aristaVacias = new ArrayList<>();
-        //crear la mayor cantidad posible de aristas totalmente al azar
-        System.out.println("Creando aristas (fila y columna al azar) ...");
-        for(int i=0; i < cuantas*100; i++){
-            fila = Util.randInt(0, n-1);
-            columna = Util.randInt(0, n-1);
-            if(ciudades[fila][columna] != NO_HAY_RUTA){
-                ciudades[fila][columna] = Util.randInt(min, max);
-                ciudades[columna][fila] = ciudades[fila][columna];
-                alAzar++;
-            }
-        }
-        System.out.println("Creadas: "+alAzar);
         //crear una lista de todas las aristas vacias, solo triangular superior
         
         System.out.println("Creando lista de aristas vacias...");
@@ -173,60 +162,30 @@ public class Grafo {
         }
         System.out.println("Creando aristas ("+cuantas+") ...");
         //crear aristas
-        if(cuantas <= 250000){
-            sobreVacias(aristaVacias, cuantas);
-        }else{
-            sobreSubListas(aristaVacias, cuantas);
-        }
+        crearAristas(aristaVacias, cuantas);
         System.out.println("Hecho");
     }
     
-    private void sobreVacias(List<Arista> aristaVacias, int cuantas) {
+    private void crearAristas(List<Arista> aristaVacias, int cuantas) {
         int fila;
         int columna;
         int index;
+        Arista aux;
         for(int i=0; i < cuantas; i++){
-            
             index = Util.randInt(0, aristaVacias.size()-1);
-            fila = aristaVacias.get(index).getFila();
-            columna = aristaVacias.get(index).getColumnna();
+            aux = aristaVacias.get(index);
+            fila = aux.getFila();
+            columna = aux.getColumnna();
             ciudades[fila][columna] = Util.randInt(min, max);
             ciudades[columna][fila] = ciudades[fila][columna];
-            aristaVacias.remove(index);
+            //remover del final de la lista se puede hacer en O(1)
+            //no me importa desordenar la lista
+            aristaVacias.set(index, aristaVacias.get(aristaVacias.size()-1));
+            aristaVacias.remove(aristaVacias.size()-1);
         }
     }
     
-    private void sobreSubListas(List<Arista> aristaVacias, int cuantas) {
-        int fila;
-        int columna;
-        int index;
-        int subSize = 1000;
-        int creadas = 0;
-        int[] sizes;
-        Arista arista = null;
-        List<List<Arista>> hiperMatriz = new ArrayList<>();
-        for(int i=0; i < aristaVacias.size();i += subSize){
-            hiperMatriz.add(aristaVacias.subList(i, i+subSize >= aristaVacias.size() ? aristaVacias.size() : i+subSize));
-        }
-        sizes = new int[hiperMatriz.size()];
-        for (int i = 0; i < sizes.length; i++) {
-            sizes[i] = subSize;
-        }
-        for(int i=0; i < cuantas; i++){
-            index = Util.randInt(0, hiperMatriz.size()-1);
-            List<Arista> sub = hiperMatriz.get(index);
-            try{
-                arista = sub.get(Util.randInt(0, sizes[i]-1));
-                sizes[i]--;
-                fila = arista.getFila();
-                columna = arista.getColumnna();
-                ciudades[fila][columna] = Util.randInt(min, max);
-                ciudades[columna][fila] = ciudades[fila][columna];
-            }catch(Exception ex){
-                
-            }
-        }
-    }
+   
 
     
     public int getN() {

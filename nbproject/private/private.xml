@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/algoritmos/Avaro.java</file>
             <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/algoritmos/Aestrella.java</file>
-            <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/algoritmos/CostoUniforme.java</file>
-            <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/main/Test.java</file>
             <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/domain/Nodo.java</file>
+            <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/domain/Tabla.java</file>
+            <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/domain/NodoCosto.java</file>
             <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/domain/Grafo.java</file>
-            <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/main/Index.java</file>
+            <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/domain/NodoHeuristico.java</file>
             <file>file:/home/juan/NetBeansProjects/busquedasIA/src/py/una/ia/busquedas/domain/NodoF.java</file>
         </group>
     </open-files>

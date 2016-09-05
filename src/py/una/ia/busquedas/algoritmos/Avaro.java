@@ -1,7 +1,6 @@
 
 package py.una.ia.busquedas.algoritmos;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 import py.una.ia.busquedas.domain.Grafo;

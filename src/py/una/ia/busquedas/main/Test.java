@@ -19,7 +19,7 @@ public class Test {
     
     public static void main(String[] args) {
         Long start = System.currentTimeMillis();
-        Grafo g = new Grafo(10, 50, 1, 3, 0, 4);
+        Grafo g = new Grafo(25, 10, 1, 3, 0, 4);
         int count = 0;
         for(int fila=0; fila < g.getN(); fila++){
             for(int columna = 0; columna < g.getN(); columna++){
