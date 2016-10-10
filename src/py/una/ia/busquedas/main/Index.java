@@ -230,7 +230,7 @@ public class Index extends javax.swing.JFrame {
         }
         Long start = System.currentTimeMillis();
         Grafo g = new Grafo(n, e, min, max, origen, destino);
-        int count = 0;
+        /*int count = 0;
         for(int fila=0; fila < g.getN(); fila++){
             for(int columna = 0; columna < g.getN(); columna++){
                 if(g.getCiudades()[fila][columna] != Grafo.NO_HAY_RUTA){
@@ -239,7 +239,7 @@ public class Index extends javax.swing.JFrame {
             }
         }
         jTextArea1.setText(null);
-        jTextArea1.append("Aristas: "+count/2+"\n");
+        jTextArea1.append("Aristas: "+count/2+"\n");*/
         double mayorH = Integer.MIN_VALUE;
         double menorH = Integer.MAX_VALUE;
         for(int i=0; i<g.getH().length-1; i++){

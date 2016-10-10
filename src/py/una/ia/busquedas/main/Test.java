@@ -21,7 +21,7 @@ public class Test {
         Long start = System.currentTimeMillis();
         Grafo g = new Grafo(25, 10, 1, 3, 0, 4);
         int count = 0;
-        for(int fila=0; fila < g.getN(); fila++){
+        /*for(int fila=0; fila < g.getN(); fila++){
             for(int columna = 0; columna < g.getN(); columna++){
                 System.out.print(g.getCiudades()[fila][columna]+" ");
                 if(g.getCiudades()[fila][columna] != Grafo.NO_HAY_RUTA){
@@ -29,7 +29,7 @@ public class Test {
                 }
             }
             System.out.println();
-        }
+        }*/
         System.out.println("Aristas: "+count/2);
         double mayorH = Integer.MIN_VALUE;
         double menorH = Integer.MAX_VALUE;
